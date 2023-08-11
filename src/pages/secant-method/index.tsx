@@ -7,6 +7,7 @@ import './../../app/globals.css';
 import Navbar from '@/components/Navbar';
 import functionPlot from 'function-plot';
 import { propDatastore } from '@/utils/propDatastore';
+import Link from 'next/link';
 
 export function evalFunc(exp: String, x: Number) {
   const parser = new Parser();
@@ -137,12 +138,12 @@ export default function SecantMethod() {
         <h4 className="text-xl font-bold mb-2 text-yellow-400">
           Secant Method
         </h4>
-        <a
+        <Link
           href="/Secant-method/algorithm"
           className="cursor-pointer inline-block my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           View Algorithm
-        </a>
+        </Link>
 
         <form id="numerical-form" onSubmit={handleSubmit}>
           <div className="col-span-full mb-2">
