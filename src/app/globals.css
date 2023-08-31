@@ -24,4 +24,15 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  padding-bottom: 8px;
+}
+
+ol,
+ul {
+  list-style-type: auto;
+}
+
+#graph {
+  background: white;
+  color: black;
 }
