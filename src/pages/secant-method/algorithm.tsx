@@ -1,43 +1,54 @@
 export default function Algorithm() {
   return (
     <div>
-      <h1>Bisection Method</h1>
+      <h1>Secant Method</h1>
       <ol>
         <li>
-          Decide initial values for x<sub>1</sub> and x<sub>2</sub> and stopping
-          criterion, E.
+          Choose initial guesses for the root:{' '}
+          <code>
+            x<sub>0</sub>
+          </code>{' '}
+          and{' '}
+          <code>
+            x<sub>1</sub>
+          </code>
+          .
         </li>
         <li>
-          Compute f<sub>1</sub> = f(x<sub>1</sub>) and f<sub>2</sub> = f(x
-          <sub>2</sub>).
+          Iterate using the formula:{' '}
+          <code>
+            x<sub>n+1</sub> = x<sub>n</sub> - f(x<sub>n</sub>) * (x<sub>n</sub>{' '}
+            - x<sub>n-1</sub>) / (f(x<sub>n</sub>) - f(x<sub>n-1</sub>))
+          </code>
+          .
         </li>
         <li>
-          If f<sub>1</sub> &times; f<sub>2</sub> &gt; 0, x<sub>1</sub> and x
-          <sub>2</sub>, do not bracket any root and go to step 7; Otherwise
-          continue.
+          If the difference between consecutive approximations,{' '}
+          <code>
+            |x<sub>n+1</sub> - x<sub>n</sub>|
+          </code>
+          , is less than a predetermined error <code>E</code>, then the current
+          approximation{' '}
+          <code>
+            x<sub>n+1</sub>
+          </code>{' '}
+          can be considered as the root.
         </li>
         <li>
-          Compute x<sub>0</sub> =; (x<sub>1</sub> + x<sub>2</sub>) /2 and
-          compute f<sub>0</sub> = f(x<sub>0</sub>)
+          Otherwise, repeat step 2 with the new approximation values{' '}
+          <code>
+            x<sub>n</sub>
+          </code>{' '}
+          and{' '}
+          <code>
+            x<sub>n+1</sub>
+          </code>
+          .
         </li>
         <li>
-          If f<sub>1</sub> &times; f<sub>2</sub> &lt; 0 then <br />
-          set x<sub>2</sub> =; x<sub>0</sub> <br />
-          else <br />
-          set x<sub>1</sub> = x<sub>0</sub> <br />
-          set f<sub>1</sub> = f<sub>0</sub>
+          Stop when the desired accuracy is achieved or a maximum number of
+          iterations is reached.
         </li>
-        <li>
-          If absolute value of (x<sub>2</sub> - x<sub>1</sub>) / x<sub>2</sub>{' '}
-          is less than error E, then <br />
-          root = (x<sub>1</sub> + x<sub>2</sub>) /2 <br />
-          write the value of root
-          <br />
-          go to step 7 <br />
-          else <br />
-          go to step 4
-        </li>
-        <li>Stop.</li>
       </ol>
     </div>
   );

@@ -1,12 +1,11 @@
 'use client';
 
-import RootLayout from '@/app/layout';
 import { Parser } from 'expr-eval';
 import { useEffect, useState } from 'react';
-import './../../app/globals.css';
-import Navbar from '@/components/Navbar';
 import { propDatastore } from '@/utils/propDatastore';
 import Link from 'next/link';
+import Script from 'next/script';
+import { submitEvent } from '@/app/custom';
 
 export function evalFunc(exp: String, x: Number) {
   const parser = new Parser();
@@ -135,13 +134,23 @@ export default function FalsePositionMethod() {
     step: 1,
   });
 
+  const [showSolution, setShowSolution] = useState(false);
+
   useEffect(() => {
     const para = propDatastore.getDatastore();
     if (para) setVariables(para);
   }, []);
 
+  useEffect(() => {
+    const button = document.getElementById('btn-submit');
+    if (button) {
+      button.setAttribute('data-function', variables.exp);
+    }
+  }, [variables.exp]);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setShowSolution(false);
 
     const formData = new FormData(e.target);
     const obj: any = Object.fromEntries(formData);
@@ -157,6 +166,7 @@ export default function FalsePositionMethod() {
     const para = { x1, x2, tolerance, max, precision, exp, step };
     setVariables(para);
     propDatastore.saveDatastore(para);
+    setShowSolution(true);
   };
 
   const { x1, x2, exp, tolerance, max, precision } = variables;
@@ -169,124 +179,123 @@ export default function FalsePositionMethod() {
 
   return (
     <div>
-      <Navbar />
-      <div className="container mx-auto pt-2 px-2 sm:px-2 ">
-        <h4 className="text-xl font-bold mb-2 text-yellow-400">
-          False Position Method
-        </h4>
-        <Link
-          href="/bisection-method/algorithm"
-          className="cursor-pointer inline-block my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      <h4 className="text-xl font-bold mb-2 text-yellow-400">
+        False Position Method
+      </h4>
+      <Link
+        href="/false-position-method/algorithm"
+        className="cursor-pointer inline-block my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        View Algorithm
+      </Link>
+
+      <form id="numerical-form" onSubmit={handleSubmit}>
+        <div className="col-span-full mb-2">
+          <label className="block text-sm font-medium leading-6 text-white-900">
+            Enter function:{' '}
+          </label>
+          <input
+            type="text"
+            name="function"
+            placeholder="Eg: x*x*x - 4 * x - 9"
+            defaultValue={variables['exp']}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
+          />
+        </div>
+
+        <div className="col-span-full mb-2">
+          <label className="block text-sm font-medium leading-6 text-white-900">
+            Enter start value:
+          </label>
+          <input
+            type="text"
+            name="start"
+            placeholder="Eg: 1"
+            defaultValue={variables['x1']}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
+          />
+        </div>
+
+        <div className="col-span-full mb-2">
+          <label className="block text-sm font-medium leading-6 text-white-900">
+            Enter end value:
+          </label>
+          <input
+            type="text"
+            name="end"
+            placeholder="Eg: 5"
+            defaultValue={variables['x2']}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
+          />
+        </div>
+
+        <div className="col-span-full mb-2">
+          <label className="block text-sm font-medium leading-6 text-white-900">
+            Precision Digits:
+          </label>
+          <input
+            type="number"
+            name="digits"
+            placeholder="Eg: 4"
+            defaultValue={variables['precision']}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
+          />
+        </div>
+
+        <div className="col-span-full mb-2">
+          <label className="block text-sm font-medium leading-6 text-white-900">
+            Maximum Steps:
+          </label>
+          <input
+            type="number"
+            name="max"
+            placeholder="Eg: 10"
+            defaultValue={variables['max']}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
+          />
+        </div>
+
+        <div className="col-span-full mb-2">
+          <label className="block text-sm font-medium leading-6 text-white-900">
+            Tolerable Error:
+          </label>
+          <input
+            type="text"
+            name="tolerance"
+            placeholder="Eg: 0.001"
+            defaultValue={variables['tolerance']}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
+          />
+        </div>
+
+        <button
+          className="cursor-pointer block mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          id="btn-submit"
+          type="submit"
+          onClick={submitEvent}
         >
-          View Algorithm
-        </Link>
-
-        <form id="numerical-form" onSubmit={handleSubmit}>
-          <div className="col-span-full mb-2">
-            <label className="block text-sm font-medium leading-6 text-white-900">
-              Enter function:{' '}
-            </label>
-            <input
-              type="text"
-              name="function"
-              placeholder="Eg: x*x*x - 4 * x - 9"
-              defaultValue={variables['exp']}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
-            />
-          </div>
-
-          <div className="col-span-full mb-2">
-            <label className="block text-sm font-medium leading-6 text-white-900">
-              Enter start value:
-            </label>
-            <input
-              type="text"
-              name="start"
-              placeholder="Eg: 1"
-              defaultValue={variables['x1']}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
-            />
-          </div>
-
-          <div className="col-span-full mb-2">
-            <label className="block text-sm font-medium leading-6 text-white-900">
-              Enter end value:
-            </label>
-            <input
-              type="text"
-              name="end"
-              placeholder="Eg: 5"
-              defaultValue={variables['x2']}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
-            />
-          </div>
-
-          <div className="col-span-full mb-2">
-            <label className="block text-sm font-medium leading-6 text-white-900">
-              Precision Digits:
-            </label>
-            <input
-              type="number"
-              name="digits"
-              placeholder="Eg: 4"
-              defaultValue={variables['precision']}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
-            />
-          </div>
-
-          <div className="col-span-full mb-2">
-            <label className="block text-sm font-medium leading-6 text-white-900">
-              Maximum Steps:
-            </label>
-            <input
-              type="number"
-              name="max"
-              placeholder="Eg: 10"
-              defaultValue={variables['max']}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
-            />
-          </div>
-
-          <div className="col-span-full mb-2">
-            <label className="block text-sm font-medium leading-6 text-white-900">
-              Tolerable Error:
-            </label>
-            <input
-              type="text"
-              name="tolerance"
-              placeholder="Eg: 0.001"
-              defaultValue={variables['tolerance']}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900  px-2"
-            />
-          </div>
-
-          <button
-            className="cursor-pointer block mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            id="btn-submit"
-            type="submit"
-          >
-            Submit
-          </button>
-          <br />
-        </form>
-
+          Submit
+        </button>
         <br />
+      </form>
 
-        <FallbackSolution f={f} f1={f1} f2={f2} />
+      <br />
 
-        <FalsePositionSolution
-          f={f}
-          x1={x1}
-          x2={x2}
-          tolerance={tolerance}
-          max={max}
-          precision={precision}
-        />
+      {showSolution && (
+        <>
+          <FallbackSolution f={f} f1={f1} f2={f2} />
+          <FalsePositionSolution
+            f={f}
+            x1={x1}
+            x2={x2}
+            tolerance={tolerance}
+            max={max}
+            precision={precision}
+          />
+        </>
+      )}
 
-        <br />
-        <div id="calc-table"></div>
-        <div id="root"></div>
-      </div>
+      <div id="graph"></div>
     </div>
   );
 }
